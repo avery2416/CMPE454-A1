@@ -57,6 +57,12 @@ class Missile {
   bool hasReachedDestination() {
 
     // YOUR CODE HERE (Step 3)
+    if (velocity.y > 0) {
+      return pos1.y >- destY;
+    }
+    else {
+      return pos1.y < destY;
+    }
 
     return false;
   }
