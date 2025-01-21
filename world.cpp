@@ -56,8 +56,13 @@ void World::handleKeystroke( int key, float x, float y )
 
 {
   // YOUR CODE HERE (Step 1)
+  float screenMin = -0.98f;
+  float screenMax = 0.98f;
+
+  float worldX = (x - screenMin) / (screenMax - screenMin);
+  float worldY = ((y - screenMin) / (screenMax - screenMin)) * worldTop;
   
-  vec3 worldMousePos = vec3( 0.5, 0.5, 0 );
+  vec3 worldMousePos = vec3(worldX, worldY, 0);
 
   // Handle key press
     
@@ -185,6 +190,13 @@ void World::fireMissile( int siloIndex, vec3 worldMousePos )
 
 {
   // YOUR CODE HERE (Step 2)
+  vec3 initPosition = silos[siloIndex].position();
+  vec3 initVelocity(0.0f, 0.0f, 0.0f);
+  float stopAtY = worldMousePos.y;
+  vec3 _colour(1.0f, 1.0f, 1.0f);
+
+  // Add the missile to the missilesOut list
+  missilesOut.add(Missile(initPosition, initVelocity, stopAtY, _colour));
 }
 
 
