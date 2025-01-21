@@ -29,26 +29,24 @@ class City {
   void draw( GPUProgram *gpu, mat4 &worldToScreen ) {
 
     // YOUR CODE HERE (Step 4)
+    
     const int numPts = 4;
 
-    vec3 points[numPts] = {
-        vec3(CITY_WIDTH, 0, 0),
-        vec3(CITY_WIDTH, CITY_HEIGHT, 0),
-        vec3(-CITY_WIDTH, CITY_HEIGHT, 0),
-        vec3(-CITY_WIDTH, 0, 0) // Static rectangle
-    };
+    vec3 points[ numPts ] = {
+      vec3( pos.x + CITY_WIDTH, pos.y,               0 ),
+      vec3( pos.x + CITY_WIDTH, pos.y + CITY_HEIGHT, 0 ),
+      vec3( pos.x - CITY_WIDTH, pos.y + CITY_HEIGHT, 0 ),
+      vec3( pos.x - CITY_WIDTH, pos.y,               0 ) };
+      
+    vec3 colours[ numPts ] = {
+      vec3(1,1,1),
+      vec3(1,1,1),
+      vec3(1,1,1),
+      vec3(1,1,1) };
 
-    vec3 colours[numPts] = {
-        vec3(1, 1, 1),
-        vec3(1, 1, 1),
-        vec3(1, 1, 1),
-        vec3(1, 1, 1)
-    };
-
-    // Transformation matrix for the city's position
-    mat4 M = worldToScreen * translate(pos.x, pos.y, 0);
+    mat4 M = worldToScreen;
     
-    drawSegs(gpu, GL_LINE_LOOP, points, colours, numPts, M);
+    drawSegs( gpu, GL_LINE_LOOP, points, colours, numPts, M );
   }
 
   void deactivate() {

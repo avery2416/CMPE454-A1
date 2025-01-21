@@ -190,13 +190,15 @@ void World::fireMissile( int siloIndex, vec3 worldMousePos )
 
 {
   // YOUR CODE HERE (Step 2)
-  vec3 initPosition = silos[siloIndex].position();
-  vec3 initVelocity(0.0f, 0.0f, 0.0f);
-  float stopAtY = worldMousePos.y;
-  vec3 _colour(1.0f, 1.0f, 1.0f);
+  if (silos[siloIndex].canShoot()) {
+    silos[siloIndex].decrMissiles();
 
-  // Add the missile to the missilesOut list
-  missilesOut.add(Missile(initPosition, initVelocity, stopAtY, _colour));
+    vec3 initPosition = silos[siloIndex].position();
+    vec3 initVelocity = INIT_OUTGOING_MISSILE_SPEED * (vec3(worldMousePos.x, worldMousePos.y, 0) - silos[siloIndex].position()).normalize();
+    float destY = worldMousePos.y;
+
+    missilesOut.add(Missile(initPosition, initVelocity, destY, vec3(1, 1, 0)));
+  }
 }
 
 

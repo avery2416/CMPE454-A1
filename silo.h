@@ -55,21 +55,21 @@ class Silo {
   void draw( GPUProgram *gpu, mat4 &worldToScreen ) {
 
     // YOUR CODE HERE (Step 4)
-    const vec3 colour(1, 1, 1);
+    
+    const vec3 colour(1,1,1);
 
-    vec3 points[NUM_SEMICIRCLE_PTS];
-    vec3 colours[NUM_SEMICIRCLE_PTS];
+    vec3 points[ NUM_SEMICIRCLE_PTS ];
+    vec3 colours[ NUM_SEMICIRCLE_PTS ];
 
-    for (int i = 0; i < NUM_SEMICIRCLE_PTS; i++) {
-        float theta = i * M_PI / (float)NUM_SEMICIRCLE_PTS;
-        points[i] = vec3(SILO_RADIUS * cos(theta), SILO_RADIUS * sin(theta), 0); // Static semicircle
-        colours[i] = colour;
+    for (int i=0; i<NUM_SEMICIRCLE_PTS; i++) {
+      float theta = i * M_PI / (float) NUM_SEMICIRCLE_PTS;
+      points[i]  = vec3( pos.x + SILO_RADIUS * cos(theta), pos.y + SILO_RADIUS * sin(theta), 0 );
+      colours[i] = colour;
     }
 
-    // Transformation matrix for the silo's position
-    mat4 M = worldToScreen * translate(pos.x, pos.y, 0);
+    mat4 M = worldToScreen;
     
-    drawSegs(gpu, GL_LINE_LOOP, points, colours, NUM_SEMICIRCLE_PTS, M);
+    drawSegs( gpu, GL_LINE_LOOP, points, colours, NUM_SEMICIRCLE_PTS, M );
   }
 
  private:
