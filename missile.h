@@ -44,6 +44,10 @@ class Missile {
     pos1 = pos1 + deltaT * velocity;
 
     // YOUR CODE HERE (Step 6)
+    velocity.y -= 0.05 * deltaT;
+
+    // Update position
+    pos1 = pos1 + deltaT * velocity;
   }
 
   // Return the current position 
