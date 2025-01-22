@@ -69,6 +69,10 @@ class Circle {
     return isOutgoing;
   }
 
+  bool overlaps(vec3 building) {
+    return (building - pos).length() <= r;
+  }
+
  private:
 
   vec3  pos;			// centre

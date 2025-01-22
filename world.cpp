@@ -122,6 +122,15 @@ void World::updateState( float deltaT )
   // increases with time.
   //
   // YOUR CODE HERE (Step 5a)
+  float spawnProbability = 0.005f + (currentTime * 0.00001f);
+  if (rand() / (float)RAND_MAX < spawnProbability) {
+    float startX = rand() / (float)RAND_MAX;
+    // float destX = rand() / (float)RAND_MAX;
+    vec3 start(startX, worldTop, 0);
+    vec3 velocity(rand() / (float)RAND_MAX*0.2 - 0.1, -0.1, 0);
+
+    missilesIn.add(Missile(start, velocity, 0, vec3(1, 1, 1)));
+  }  
 
 
 
@@ -131,14 +140,18 @@ void World::updateState( float deltaT )
     if (missilesIn[i].hasReachedDestination()) {
     
       // YOUR CODE HERE (Step 5b)
-      
+      explosions.add(Circle(missilesIn[i].position(), 0.07, 0.07, vec3(1, 0.5, 0.5), false));
+      missilesIn.remove(i);
+      i--;
     }
 
   for (int i=0; i<missilesOut.size(); i++)
     if (missilesOut[i].hasReachedDestination()) {
     
       // YOUR CODE HERE (Step 5b)
-      
+      explosions.add(Circle(missilesOut[i].position(), 0.07, 0.04, vec3(0.5,0.5,1), true));
+      missilesOut.remove(i);
+      i--;
     }
 
   // Look for terminating explosions
@@ -163,17 +176,42 @@ void World::updateState( float deltaT )
   // Check for explosions overlapping silos and cities
   //
   // YOUR CODE HERE (Step 5c)
+  for (int i = 0; i < explosions.size(); ++i) {
+    if (citiesLeftAlive > 0) {
+      for (int j = 0; j < cities.size(); ++j) {
+        if (cities[j].isAlive() && explosions[i].overlaps(cities[j].position())) {
+          cities.remove(j);
+          citiesLeftAlive--;
+        }
+      }
+    }
+
+    if (silos.size() > 0) {
+      for (int j = 0; j < silos.size(); ++j) {
+        if (silos[j].isAlive() && explosions[i].overlaps(silos[j].position())) {
+          silos.remove(j);
+        }
+      }
+    }
+  } 
 
 
   // Check for outgoing missiles that have exploded and intersect an
   // incoming missile
 
-  for (int i=0; i<explosions.size(); i++) 
+  for (int i=0; i<explosions.size(); i++) {
     if (explosions[i].isOutgoingMissile()) {
 
       // YOUR CODE HERE (Step 5d)
-      
+      if (missilesIn.size() > 0) {
+        for (int j = 0; j < missilesIn.size(); ++j) {
+          if(explosions[i].overlaps(missilesIn[j].position())) {
+            missilesIn.remove(j);
+          }
+        }
+      }
     }
+  }
 
   // Check for advancing to next round (e.g. when a certain number of
   // incoming missile have finished, or when all cities are destroyed).
