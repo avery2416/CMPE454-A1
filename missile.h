@@ -33,6 +33,9 @@ class Missile {
     vec3 points[  numPts ] = { pos0,   pos1 };
     vec3 colours[ numPts ] = { colour, colour };
 
+    // vec3 direction = velocity.normalize();
+    // mat4 rotation = direction.rotation
+
     mat4 M = worldToScreen;
     
     drawSegs( gpu, GL_LINES, points, colours, numPts, M );
@@ -47,6 +50,7 @@ class Missile {
     velocity.y -= 0.05 * deltaT;
 
     // Update position
+    pos0 = pos1 - (0.075 * velocity.normalize());
     pos1 = pos1 + deltaT * velocity;
   }
 
