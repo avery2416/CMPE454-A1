@@ -40,10 +40,20 @@ void World::draw()
 
   // Status message
 
-  static char buffer[1000];
+  static char gameTitleBuffer[1000];
 
-  sprintf( buffer, "MISSILE COMMAND" );
-  strokeFont->drawStrokeString( buffer, 0, 0.85, 0.07, 0, CENTRE, vec3(0.2,0.7,0.5) );
+  sprintf( gameTitleBuffer, "MISSILE COMMAND" );
+  strokeFont->drawStrokeString( gameTitleBuffer, 0, 0.85, 0.07, 0, CENTRE, vec3(0.2,0.7,0.5) );
+
+  static char scoreTitleBuffer[1000];
+
+  sprintf( scoreTitleBuffer, "Score" );
+  strokeFont->drawStrokeString( scoreTitleBuffer, 0, 0.025, 0.05, 0, CENTRE, vec3(1,0.7,0.5) );
+
+  static char scoreBuffer[1000];
+
+  sprintf( scoreBuffer, "%d", score );
+  strokeFont->drawStrokeString( scoreBuffer, 0, -0.025, 0.05, 0, CENTRE, vec3(1,0.7,0.5) );
 }
 
 
@@ -189,7 +199,7 @@ void World::updateState( float deltaT )
     if (silos.size() > 0) {
       for (int j = 0; j < silos.size(); ++j) {
         if (silos[j].isAlive() && explosions[i].overlaps(silos[j].position())) {
-          silos.remove(j);
+          silos[j].deactivate();
         }
       }
     }
@@ -207,6 +217,7 @@ void World::updateState( float deltaT )
         for (int j = 0; j < missilesIn.size(); ++j) {
           if(explosions[i].overlaps(missilesIn[j].position())) {
             missilesIn.remove(j);
+            score++;
           }
         }
       }

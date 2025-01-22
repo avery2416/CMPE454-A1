@@ -6,6 +6,7 @@
 
 #include "headers.h"
 #include "drawSegs.h"
+#include "strokefont.h"
 
 #define SILO_RADIUS 0.04
 #define NUM_SEMICIRCLE_PTS 100
@@ -24,6 +25,8 @@ class Silo {
     roundsLeft = 15;
     alive = true;
     pos = _pos;
+
+    strokeFont = new StrokeFont();
   }
 
   bool canShoot() {
@@ -72,7 +75,15 @@ class Silo {
     mat4 M = worldToScreen * translate(pos);
 
     drawSegs(gpu, GL_LINE_LOOP, points, colours, NUM_SEMICIRCLE_PTS, M);
-}
+
+    static char buffer[2];
+
+    float xRemMissiles = M[0][3];
+    float yRemMissiles = M[1][3] + 0.025;
+
+    sprintf( buffer, "%d", roundsLeft);
+    strokeFont->drawStrokeString( buffer, xRemMissiles, yRemMissiles, 0.07, 0, CENTRE, vec3(.5, 1, 1) );
+  }
 
 
  private:
@@ -80,6 +91,8 @@ class Silo {
   int roundsLeft;
   bool alive;
   vec3 pos;
+
+  StrokeFont *strokeFont;  
 };
   
 
